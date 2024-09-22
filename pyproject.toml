@@ -3,20 +3,20 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "endstone-example"
+name = "endstone-op-lock"
 version = "0.1.0"
 dependencies = []
 authors = [
     { name = "Endstone Developers", email = "hello@endstone.dev" },
     { name = "Huang FTS427", email = "FTS427@outlook.com" },
 ]
-description = "Python example plugin for Endstone servers"
+description = "Lock op"
 readme = "README.md"
 license = { file = "LICENSE" }
 keywords = ["endstone", "plugin"]
 
 [project.urls]
-Homepage = "https://github.com/ZH-Server/endstone_NAME/"
+Homepage = "https://github.com/ZH-Server/endstone_op_lock/"
 
 [project.entry-points."endstone"]
-example = "endstone_example:ExamplePlugin"
+op-lock = "endstone_op_lock:OpLock"
