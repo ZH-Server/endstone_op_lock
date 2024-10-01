@@ -1,28 +1,27 @@
 from endstone.plugin import Plugin
 from endstone.command import *
 from endstone.event import PlayerCommandEvent, event_handler
-import json, os
 
 class OpLock(Plugin):
     api_version = "0.5"
 
+    def __init__(self):
+        super().__init__()
+        self.oplist: list[str] = []
+
     def on_enable(self) -> None:
-        self.op_list_dir=os.path.join(os.getcwd(), "plugins", "lock_op")
-        self.op_list_json=os.path.join(os.getcwd(), "plugins", "lock_op", "op_list.json")
-        if not os.path.exists(self.op_list_json):
-            os.makedirs(self.op_list_dir, exist_ok=True)
-            with open(self.op_list_json,'w',encoding='utf-8') as f:
-                json.dump({}, f, ensure_ascii=False, indent=4)
+        self.save_default_config()
+        self.load_config()
         self.register_events(self)
-    
+
     @event_handler
-    def on_use_op_cmd(self, event: PlayerCommandEvent) -> None:
-        with open(self.op_list_json, 'r', encoding='utf-8') as f:
-            op_data=json.load(f)
+    def on_change_permissions(self, event: PlayerCommandEvent) -> None:
         if ["op", "deop"] in event.command:
-            if event.player.is_op == True:
-                op_info={
-                    f"{event.player.name}": "True"
-                }
-                json.dump(op_info, f, ensure_ascii=False, indent=4)
-                event.player.send_message(f"{event.command}")
+            if event.player.is_op == True and event.player.name in self.oplist and event.player.name != "Server":
+                event.player.perform_command(event.command)
+            else:
+                event.player.send_error_message("You isn't allowed to change permissions")
+                event.cancelled
+
+    def load_config(self) -> None:
+        self.oplist = self.config["op_allowed"]

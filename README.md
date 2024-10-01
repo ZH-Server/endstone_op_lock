@@ -1,6 +1,6 @@
-# Endstone Exaple Plugin
+# Endstone Op Lock Plugin
 
-Example plugin
+Lock op
 
 ## Feature
 
